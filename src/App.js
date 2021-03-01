@@ -1,19 +1,29 @@
-import "./App.css";
-import { useEffect, useState } from "react";
-import { getCurrentLocationWeather } from "./api/current.api.js";
-import { getCurrentLocation } from "./api/location.api.js";
+import "./App.scss";
+import LocationSelect from "./components/locationSelect";
+import TemperatureScale from "./components/widgets/temperatureScale";
+import Container from "@material-ui/core/Container";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import WeatherWidgets from "./components/weatherWidgets";
+import { useSelectedLocation } from "./reducers";
 
 function App() {
-  const [data, setData] = useState({});
-  useEffect(() => {
-    getCurrentLocation().then((location) => {
-      const city = location.address.city || location.address.town;
-      getCurrentLocationWeather(city).then((json) => {
-        setData(json);
-      });
-    });
-  }, []);
-  return <div className="App">{JSON.stringify(data)}</div>;
+  const queryClient = new QueryClient();
+  const { selectedLocation, updateSelectedLocation } = useSelectedLocation();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
+      <Container className="app-container" maxWidth={false}>
+        <LocationSelect
+          maxWidth="50%"
+          selectedLocation={selectedLocation}
+          updateSelectedLocation={updateSelectedLocation}
+        />
+        <WeatherWidgets selectedLocation={selectedLocation} />
+      </Container>
+    </QueryClientProvider>
+  );
 }
 
 export default App;
