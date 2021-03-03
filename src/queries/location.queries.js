@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from "react-query";
+import { useMemo } from "react";
 
 const getCurrentLocation = () => {
   return new Promise((resolve) => {
@@ -25,7 +26,7 @@ const getCurrentLocation = () => {
   });
 };
 
-const getLocationAutoComplete = async (query) => {
+export const getLocationAutoComplete = async (query) => {
   if (query) {
     try {
       const response = await fetch(
@@ -47,22 +48,26 @@ export const useLocationOptions = (input) => {
     ["locationAutoComplete", input],
     () => getLocationAutoComplete(input),
     {
-      staleTime: 60000,
+      staleTime: 6000,
     }
   );
 
-  const options = Array.prototype.map.call(data || [], (location) => ({
-    label: location.display_name,
-    value: location.place_id,
-    data: location,
-  }));
+  const autoCompleteOptions = useMemo(
+    () =>
+      Array.prototype.map.call(data || [], (location) => ({
+        label: location.display_name,
+        value: location.place_id,
+        data: location,
+      })),
+    [data]
+  );
 
   const invalidateLocationAutoComplete = () => {
     client.invalidateQueries("locationAutoComplete");
   };
 
   return {
-    options,
+    autoCompleteOptions,
     isLoading,
     isError,
     status,
@@ -75,7 +80,7 @@ export const useCurrentLocation = () => {
     ["currentLocation"],
     () => getCurrentLocation(),
     {
-      staleTime: 1000 * 60 * 5,
+      staleTime: 6000,
     }
   );
 

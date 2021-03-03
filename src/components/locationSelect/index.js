@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { CircularProgress, FormControl, TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import {
@@ -14,34 +14,48 @@ const LocationSelect = ({
 }) => {
   const [input, setInput] = useState("");
   const [open, setOpen] = useState(false);
+  const [options, setOptions] = useState([]);
 
   const { currentLocation } = useCurrentLocation();
   const {
-    options,
+    autoCompleteOptions,
     isLoading,
     invalidateLocationAutoComplete,
   } = useLocationOptions(input);
 
   useEffect(() => {
     return () => invalidateLocationAutoComplete();
-  }, [invalidateLocationAutoComplete]);
+  }, []);
 
-  useEffect(() => {
+  const currentLocationOption = useMemo(() => {
     if (currentLocation && currentLocation.place_id) {
-      updateSelectedLocation({
+      return {
         value: currentLocation.place_id,
         label: currentLocation.address.city || currentLocation.address.town,
         data: currentLocation,
-      });
+      };
     }
-  }, [currentLocation, updateSelectedLocation]);
+    return {};
+  }, [currentLocation]);
 
-  const onChange = useCallback((e, value) => {
-    updateSelectedLocation(value);
-  }, []);
+  useEffect(() => {
+    setOptions([...autoCompleteOptions, currentLocationOption]);
+  }, [autoCompleteOptions, currentLocationOption]);
+
+  useEffect(() => {
+    if (currentLocationOption) {
+      updateSelectedLocation(currentLocationOption);
+    }
+  }, [currentLocationOption, updateSelectedLocation]);
+
+  const onChange = useCallback(
+    (e, value) => {
+      updateSelectedLocation(value);
+    },
+    [updateSelectedLocation]
+  );
 
   const onInputChange = useCallback((e, value) => {
-    console.log("oninputchange", value);
     setInput(value);
   }, []);
 
@@ -59,9 +73,15 @@ const LocationSelect = ({
         value={selectedLocation}
         onChange={onChange}
         onInputChange={debounce(onInputChange, 1000)}
-        options={options || []}
+        options={options}
         loading={isLoading}
-        getOptionLabel={(option) => option.label}
+        getOptionSelected={(option, value) => {
+          console.log(option, value);
+          return option.value === value.value;
+        }}
+        getOptionLabel={(option) => {
+          return option.label || "";
+        }}
         renderInput={(params) => (
           <TextField
             {...params}

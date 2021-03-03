@@ -6,10 +6,10 @@ const WeatherWidgets = ({
   spacing,
   children,
   className,
-  selectedLocation,
+  lat,
+  lon,
   ...props
 }) => {
-  const { lat, lon } = selectedLocation?.data || {};
   const { weatherData, isLoading } = useWeatherByLocation(lat, lon);
   return (
     <Grid

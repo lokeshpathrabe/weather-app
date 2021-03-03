@@ -10,7 +10,7 @@ import { useSelectedLocation } from "./reducers";
 function App() {
   const queryClient = new QueryClient();
   const { selectedLocation, updateSelectedLocation } = useSelectedLocation();
-
+  const { lat, lon } = selectedLocation?.data || {};
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
@@ -20,7 +20,7 @@ function App() {
           selectedLocation={selectedLocation}
           updateSelectedLocation={updateSelectedLocation}
         />
-        <WeatherWidgets selectedLocation={selectedLocation} />
+        <WeatherWidgets lat={lat} lon={lon} />
       </Container>
     </QueryClientProvider>
   );
