@@ -1,15 +1,15 @@
 import { useQuery, useQueryClient } from "react-query";
+const AWS_HOST = process.env.REACT_APP_AWS_HOST;
 
 const getCurrentLocationWeather = (lat, lon) => {
   if (lat && lon) {
-    return fetch(
-      `http://api.weatherapi.com/v1/current.json?key=c61f699e63cb43fa8a8112027202612&q=${lat},${lon}`,
-      {
-        method: "GET",
-      }
-    ).then((response) => {
-      return response.json();
-    });
+    return fetch(`${AWS_HOST}/getweather?lat=${lat}&lon=${lon}`, {
+      method: "GET",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => data);
   } else {
     return [];
   }
