@@ -4,9 +4,6 @@ exports.handler = async (event) => {
   if (event.httpMethod === "GET") {
     const lat = event.queryStringParameters && event.queryStringParameters.lat;
     const lon = event.queryStringParameters && event.queryStringParameters.lon;
-    const query =
-      event.queryStringParameters && event.queryStringParameters.query;
-
     return await getLocations(lat, lon);
   } else {
     return httpMethodError();

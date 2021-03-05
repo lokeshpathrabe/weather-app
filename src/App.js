@@ -7,13 +7,13 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import WeatherWidgets from "./components/weatherWidgets";
 import { useSelectedLocation } from "./reducers";
 
+const queryClient = new QueryClient();
+
 function App() {
-  const queryClient = new QueryClient();
   const { selectedLocation, updateSelectedLocation } = useSelectedLocation();
   const { lat, lon } = selectedLocation?.data || {};
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
       <Container className="app-container" maxWidth={false}>
         <LocationSelect
           maxWidth="50%"
@@ -22,6 +22,7 @@ function App() {
         />
         <WeatherWidgets lat={lat} lon={lon} />
       </Container>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

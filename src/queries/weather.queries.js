@@ -22,7 +22,7 @@ export const useWeatherByLocation = (lat, lon) => {
     ["weatherByLocation", lat, lon],
     () => getCurrentLocationWeather(lat, lon),
     {
-      staleTime: 6000,
+      staleTime: 60000,
     }
   );
 

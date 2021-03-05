@@ -1,6 +1,8 @@
 import { useQuery, useQueryClient } from "react-query";
 import { useMemo } from "react";
 
+const AWS_HOST = process.env.REACT_APP_AWS_HOST;
+
 const getCurrentLocation = () => {
   return new Promise((resolve) => {
     if (window.navigator.geolocation) {
@@ -15,9 +17,7 @@ const getCurrentLocation = () => {
     }
   }).then(({ lon, lat }) => {
     if (lon && lat) {
-      return fetch(
-        `https://us1.locationiq.com/v1/reverse.php?key=pk.8782827ee41fddbc68cc44c10dfe33b0&lat=${lat}&lon=${lon}&format=json`
-      )
+      return fetch(`${AWS_HOST}/searchlocation?lat=${lat}&lon=${lon}`)
         .then((response) => response.json())
         .then((data) => {
           return data;
@@ -26,14 +26,12 @@ const getCurrentLocation = () => {
   });
 };
 
-export const getLocationAutoComplete = async (query) => {
+const getLocationAutoComplete = async (query) => {
   if (query) {
     try {
-      const response = await fetch(
-        `https://us1.locationiq.com/v1/search.php?key=pk.8782827ee41fddbc68cc44c10dfe33b0&&q=${query}&format=json`
-      );
+      const response = await fetch(`${AWS_HOST}/searchcities?query=${query}`);
       const json = await response.json();
-      return json;
+      return filterCities(json);
     } catch (e) {
       return [];
     }
@@ -42,13 +40,16 @@ export const getLocationAutoComplete = async (query) => {
   }
 };
 
+const filterCities = (locations = []) =>
+  locations.filter((location) => location.type === "city");
+
 export const useLocationOptions = (input) => {
   const client = useQueryClient();
   const { data, isLoading, isError, status } = useQuery(
     ["locationAutoComplete", input],
     () => getLocationAutoComplete(input),
     {
-      staleTime: 6000,
+      staleTime: 60000,
     }
   );
 
