@@ -1,44 +1,34 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
-import Widget from "../../widget";
+import Widget from "../widget";
 
 function valuetext(value) {
   return `${value}°C`;
 }
 
-const marks = [
-  {
-    value: 0,
-    label: "0°C",
-  },
-  {
-    value: 20,
-    label: "20°C",
-  },
-  {
-    value: 37,
-    label: "37°C",
-  },
-  {
-    value: 100,
-    label: "100°C",
-  },
-];
-
-export default function TemperatureScale() {
+export default function TemperatureScale({ isLoading, value }) {
+  const integerValue = Number.parseInt(value);
   return (
-    <Widget className="temperature-widget">
+    <Widget className="temperature-widget" isLoading={isLoading}>
       <Typography id="temperature-scale" gutterBottom>
         Temperature
       </Typography>
 
       <Slider
         orientation="vertical"
-        defaultValue={30}
+        defaultValue={integerValue}
         aria-labelledby="temperature-scale"
         getAriaValueText={valuetext}
-        marks={marks}
+        max={60}
+        min={-60}
+        marks={[
+          {
+            value: integerValue,
+            label: `${integerValue}°C`,
+          },
+        ]}
+        step={null}
       />
     </Widget>
   );

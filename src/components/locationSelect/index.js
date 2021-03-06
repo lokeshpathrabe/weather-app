@@ -60,7 +60,11 @@ const LocationSelect = ({
   }, []);
 
   return (
-    <FormControl style={{ maxWidth }} variant="outlined" fullWidth>
+    <FormControl
+      style={{ maxWidth: maxWidth, marginBottom: "5vh" }}
+      variant="outlined"
+      fullWidth
+    >
       <Autocomplete
         id="location"
         open={open}
@@ -101,7 +105,7 @@ const LocationSelect = ({
           />
         )}
       />
-      <pre>{JSON.stringify(selectedLocation, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(selectedLocation, null, 2)}</pre> */}
     </FormControl>
   );
 };
