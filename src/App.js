@@ -1,6 +1,5 @@
 import "./App.scss";
 import LocationSelect from "./components/locationSelect";
-import TemperatureScale from "./components/widgets/temperatureScale";
 import Container from "@material-ui/core/Container";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
