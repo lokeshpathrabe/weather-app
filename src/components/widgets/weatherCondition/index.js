@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 
 const WeatherCondition = ({ data, isLoading }) => {
   const classes = useStyles();
-  console.log(data, isLoading);
+  // console.log(data, isLoading);
   return (
     <Widget className={classes.widgetRoot} isLoading={isLoading}>
       {data && data.current ? (

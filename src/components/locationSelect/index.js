@@ -80,7 +80,7 @@ const LocationSelect = ({
         options={options}
         loading={isLoading}
         getOptionSelected={(option, value) => {
-          console.log(option, value);
+          // console.log(option, value);
           return option.value === value.value;
         }}
         getOptionLabel={(option) => {

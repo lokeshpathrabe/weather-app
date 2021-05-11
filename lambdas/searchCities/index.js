@@ -14,13 +14,18 @@ const searchCities = async (query) => {
   const key = process.env.LOCATION_API_KEY;
   console.log(`GET search location for ${query}`);
   const result = await fetch(
-    `https://us1.locationiq.com/v1/search.php?key=${key}&q=${query}&format=json&tag=place:city&dedupe=1`
+    `https://api.weatherapi.com/v1/search.json?key=${key}&q=${query}`
   );
   const data = await result.json();
-  const cities = filterCities(data);
+  // const cities = filterCities(data);
   const response = {
     statusCode: 200,
-    body: JSON.stringify(cities),
+    headers:{
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Request-Method': 'GET,OPTIONS',
+      'Access-Control-Request-Headers': 'Content-Type'
+    },
+    body: JSON.stringify(data),
   };
   return response;
 };

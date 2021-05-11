@@ -17,7 +17,7 @@ const getCurrentLocationWeather = (lat, lon) => {
 
 export const useWeatherByLocation = (lat, lon) => {
   const client = useQueryClient();
-  console.log("fetching weather for ", lat, lon);
+  // console.log("fetching weather for ", lat, lon);
   const { data, isLoading, isError, status } = useQuery(
     ["weatherByLocation", lat, lon],
     () => getCurrentLocationWeather(lat, lon),

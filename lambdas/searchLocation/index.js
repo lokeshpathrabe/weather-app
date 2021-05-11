@@ -19,6 +19,11 @@ const getLocations = async (lat, lon) => {
   const data = await result.json();
   const response = {
     statusCode: 200,
+    headers:{
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Request-Method': 'GET,OPTIONS',
+      'Access-Control-Request-Headers': 'Content-Type'
+    },
     body: JSON.stringify(data),
   };
   return response;
