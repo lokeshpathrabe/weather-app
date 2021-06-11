@@ -4,6 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
+/.env
+/src
+/.package.json
+/.yarn.lock
 
 # testing
 /coverage
