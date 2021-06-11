@@ -86,7 +86,7 @@ export const useCurrentLocation = () => {
     ["currentLocation"],
     () => getCurrentLocation(),
     {
-      staleTime: 6000,
+      staleTime: Infinity,
     }
   );
 
