@@ -17,7 +17,9 @@ const getCurrentLocation = () => {
     }
   }).then(({ lon, lat }) => {
     if (lon && lat) {
-      return fetch(`${AWS_HOST}/searchlocation?lat=${lat}&lon=${lon}`)
+      return fetch(`${AWS_HOST}/searchlocation?lat=${lat}&lon=${lon}`, {headers: {
+        'Content-Type' : 'application/json',
+      }})
         .then((response) => response.json())
         .then((data) => {
           return data;
@@ -29,9 +31,10 @@ const getCurrentLocation = () => {
 const getLocationAutoComplete = async (query) => {
   if (query) {
     try {
-      const response = await fetch(`${AWS_HOST}/searchcities?query=${query}`);
-      const json = await response.json();
-      return filterCities(json);
+      const response = await fetch(`${AWS_HOST}/searchcities?query=${query}`,{headers: {
+        'Content-Type' : 'application/json',
+      }});
+      return await response.json();
     } catch (e) {
       return [];
     }
@@ -56,8 +59,8 @@ export const useLocationOptions = (input) => {
   const autoCompleteOptions = useMemo(
     () =>
       Array.prototype.map.call(data || [], (location) => ({
-        label: location.display_name,
-        value: location.place_id,
+        label: location.name,
+        value: location.id,
         data: location,
       })),
     [data]
@@ -66,6 +69,8 @@ export const useLocationOptions = (input) => {
   const invalidateLocationAutoComplete = () => {
     client.invalidateQueries("locationAutoComplete");
   };
+
+  console.log('autocomplete', data)
 
   return {
     autoCompleteOptions,
@@ -81,9 +86,10 @@ export const useCurrentLocation = () => {
     ["currentLocation"],
     () => getCurrentLocation(),
     {
-      staleTime: 6000,
+      staleTime: Infinity,
     }
   );
 
   return { currentLocation: data, isLoading, isError, status };
 };
+

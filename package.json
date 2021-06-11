@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv ./build ./app",
+    "build": "rm -rf ./build ./app && react-scripts build && mv ./build ./app && mv ./app/index.html ./index.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

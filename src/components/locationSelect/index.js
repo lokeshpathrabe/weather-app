@@ -17,11 +17,8 @@ const LocationSelect = ({
   const [options, setOptions] = useState([]);
 
   const { currentLocation } = useCurrentLocation();
-  const {
-    autoCompleteOptions,
-    isLoading,
-    invalidateLocationAutoComplete,
-  } = useLocationOptions(input);
+  const { autoCompleteOptions, isLoading, invalidateLocationAutoComplete } =
+    useLocationOptions(input);
 
   useEffect(() => {
     return () => invalidateLocationAutoComplete();
@@ -76,11 +73,11 @@ const LocationSelect = ({
         }}
         value={selectedLocation}
         onChange={onChange}
-        onInputChange={debounce(onInputChange, 1000)}
+        onInputChange={debounce(onInputChange, 500)}
         options={options}
         loading={isLoading}
         getOptionSelected={(option, value) => {
-          console.log(option, value);
+          // console.log(option, value);
           return option.value === value.value;
         }}
         getOptionLabel={(option) => {

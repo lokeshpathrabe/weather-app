@@ -4,7 +4,7 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import React from "react";
 
 const Widget = ({ spacing, children, className, isLoading, ...props }) => {
-  console.log("isloading: ", isLoading);
+  // console.log("isloading: ", isLoading);
   return (
     <Grid
       className={`${className} widget`}
